@@ -7,6 +7,9 @@ load_dotenv()
 # Which model answers as the tutor: anthropic | openai | gemini
 LLM_PROVIDER = os.getenv("LLM_PROVIDER", "anthropic").strip().lower()
 
+# Which model transcribes mic input: openai | gemini
+STT_PROVIDER = os.getenv("STT_PROVIDER", "openai").strip().lower()
+
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
@@ -19,6 +22,8 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 # free tier is crowding, and a 503 there looks like a hang because the SDK
 # retries with backoff. One or two versions back answers immediately.
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+WHISPER_MODEL = os.getenv("WHISPER_MODEL", "whisper-1")
+GEMINI_STT_MODEL = os.getenv("GEMINI_STT_MODEL", "gemini-3.5-transcribe")
 # Gemini 3.x reasons before answering by default, which costs seconds and eats
 # the output budget. A tutor reply does not need it. 0 disables; a negative
 # value leaves the model's own default alone.
@@ -46,5 +51,16 @@ elif not _LLM_KEYS[LLM_PROVIDER][1]:
     )
 if not ELEVENLABS_API_KEY:
     print("WARNING: ELEVENLABS_API_KEY is not set — audio will be skipped.")
-if not OPENAI_API_KEY:
-    print("WARNING: OPENAI_API_KEY is not set — mic input (Whisper STT) will fail.")
+_STT_KEYS = {"openai": ("OPENAI_API_KEY", OPENAI_API_KEY),
+             "gemini": ("GEMINI_API_KEY", GEMINI_API_KEY)}
+
+if STT_PROVIDER not in _STT_KEYS:
+    print(
+        f"WARNING: STT_PROVIDER={STT_PROVIDER!r} is not one of "
+        f"{', '.join(sorted(_STT_KEYS))} — mic input will fail."
+    )
+elif not _STT_KEYS[STT_PROVIDER][1]:
+    print(
+        f"WARNING: STT_PROVIDER is {STT_PROVIDER} but "
+        f"{_STT_KEYS[STT_PROVIDER][0]} is not set — mic input will fail."
+    )

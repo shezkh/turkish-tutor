@@ -9,7 +9,7 @@ A web app where a 3D character, Deniz, teaches you Turkish through real conversa
 ## What it does
 
 - **Conversation, not flashcards.** Pick a lesson, then talk to Deniz. Claude plays the tutor, in character, scoped to that lesson's material.
-- **Voice in.** Hold the 🎤 button to record, release to transcribe (Whisper) and send automatically.
+- **Voice in.** Hold the 🎤 button to record, release to transcribe and send automatically. Transcription runs on Whisper or on Gemini, chosen with `STT_PROVIDER`.
 - **Voice out.** The reply is spoken with ElevenLabs and drives the avatar's mouth through amplitude-based lipsync in the browser.
 - **Six A1 lessons**, loaded from `backend/app/curriculum/*.json` and selectable from a dropdown:
   greetings and introductions, numbers and age, family, daily routine and time, food and drink, shopping and colours.
@@ -38,7 +38,7 @@ A web app where a 3D character, Deniz, teaches you Turkish through real conversa
 
 You need Node.js 20+, Python 3.11+, and API keys. The avatar is already in the repo.
 
-You need **one** key for the tutor, chosen with `LLM_PROVIDER`: [Anthropic](https://console.anthropic.com), [OpenAI](https://platform.openai.com/api-keys) or [Gemini](https://aistudio.google.com/apikey). Gemini has a free tier and needs no card, so it is the cheapest way to try this. You also need [ElevenLabs](https://elevenlabs.io) for the voice, and an OpenAI key for microphone input regardless of which tutor you pick, since transcription uses Whisper.
+You need **one** key for the tutor, chosen with `LLM_PROVIDER`: [Anthropic](https://console.anthropic.com), [OpenAI](https://platform.openai.com/api-keys) or [Gemini](https://aistudio.google.com/apikey). Gemini has a free tier and needs no card, so it is the cheapest way to try this, and setting `STT_PROVIDER=gemini` lets the same key handle the microphone too. You also need [ElevenLabs](https://elevenlabs.io) for the voice.
 
 **Backend**
 
@@ -73,7 +73,9 @@ LLM_PROVIDER=gemini      # or anthropic (default), or openai
 GEMINI_API_KEY=...
 ```
 
-Each provider SDK is imported inside its own function, so a provider you are not using does not need to be installed. Prompt caching is applied on the Anthropic path only, because the `cache_control` blocks are specific to that API. Model names move and providers retire them, so if a call 404s the error usually names the replacement. Set `CLAUDE_MODEL`, `OPENAI_MODEL` or `GEMINI_MODEL` to whatever the provider currently lists; for Gemini, `client.models.list()` prints exactly what your key can call.
+Transcription works the same way, with `STT_PROVIDER=openai` (Whisper) or `gemini`. With `LLM_PROVIDER=gemini` and `STT_PROVIDER=gemini` the whole app runs on one free Gemini key, with ElevenLabs the only other service it needs.
+
+Each provider SDK is imported inside its own function, so a provider you are not using does not need to be installed, and a broken one cannot take down the API at import time. Prompt caching is applied on the Anthropic path only, because the `cache_control` blocks are specific to that API. Model names move and providers retire them, so if a call 404s the error usually names the replacement. Set `CLAUDE_MODEL`, `OPENAI_MODEL` or `GEMINI_MODEL` to whatever the provider currently lists; for Gemini, `client.models.list()` prints exactly what your key can call.
 
 ## API
 
