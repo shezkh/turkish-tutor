@@ -23,7 +23,7 @@ A web app where a 3D character, Deniz, teaches you Turkish through real conversa
 |---|---|
 | Frontend | Next.js 14 (App Router), TypeScript, Tailwind, `@react-three/fiber` (Three.js) |
 | Backend | Python, FastAPI |
-| Tutor | Anthropic Claude |
+| Tutor | Anthropic Claude, OpenAI or Gemini, selected with `LLM_PROVIDER` |
 | Speech out | ElevenLabs (Turkish voice) |
 | Speech in | OpenAI Whisper |
 | Avatar | VRoid `AvatarSample_C`, rendered in the browser (see [Avatar](#avatar)) |
@@ -36,7 +36,9 @@ A web app where a 3D character, Deniz, teaches you Turkish through real conversa
 
 ## Running it
 
-You need Node.js 20+, Python 3.11+, and API keys for [Anthropic](https://console.anthropic.com), [ElevenLabs](https://elevenlabs.io) and [OpenAI](https://platform.openai.com/api-keys). The avatar is already in the repo.
+You need Node.js 20+, Python 3.11+, and API keys. The avatar is already in the repo.
+
+You need **one** key for the tutor, chosen with `LLM_PROVIDER`: [Anthropic](https://console.anthropic.com), [OpenAI](https://platform.openai.com/api-keys) or [Gemini](https://aistudio.google.com/apikey). Gemini has a free tier and needs no card, so it is the cheapest way to try this. You also need [ElevenLabs](https://elevenlabs.io) for the voice, and an OpenAI key for microphone input regardless of which tutor you pick, since transcription uses Whisper.
 
 **Backend**
 
@@ -61,6 +63,17 @@ npm run dev
 ```
 
 Open http://localhost:3000 and you should see Deniz and a chat panel.
+
+## Swapping the model
+
+The tutor sits behind one function, `generate_tutor_reply()` in `app/services/llm.py`. Nothing else in the app knows which model answered, so switching is one line in `.env`:
+
+```bash
+LLM_PROVIDER=gemini      # or anthropic (default), or openai
+GEMINI_API_KEY=...
+```
+
+Each provider SDK is imported inside its own function, so a provider you are not using does not need to be installed. Prompt caching is applied on the Anthropic path only, because the `cache_control` blocks are specific to that API. Model names move; if a call 404s, set `CLAUDE_MODEL`, `OPENAI_MODEL` or `GEMINI_MODEL` to whatever the provider currently lists.
 
 ## API
 
