@@ -5,6 +5,7 @@ plus base64-encoded MP3 audio of the same reply spoken by ElevenLabs.
 """
 import base64
 import json
+import re
 from pathlib import Path
 from typing import Literal
 
@@ -16,6 +17,10 @@ from app.services import llm, stt, tts
 router = APIRouter()
 
 CURRICULUM_DIR = Path(__file__).resolve().parent.parent / "curriculum"
+
+# Lesson ids come straight from the URL and the request body, so they are
+# untrusted input. Anything outside this shape never reaches the filesystem.
+LESSON_ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
 class Message(BaseModel):
@@ -35,9 +40,13 @@ class ChatResponse(BaseModel):
 
 
 def _load_lesson(lesson_id: str) -> dict:
-    path = CURRICULUM_DIR / f"{lesson_id.replace('-', '_')}.json"
-    if not path.exists():
-        raise HTTPException(404, f"Lesson {lesson_id} not found")
+    not_found = HTTPException(404, "Lesson not found")
+    if not LESSON_ID_RE.fullmatch(lesson_id):
+        raise not_found
+    base = CURRICULUM_DIR.resolve()
+    path = (base / f"{lesson_id.replace('-', '_')}.json").resolve()
+    if base not in path.parents or not path.is_file():
+        raise not_found
     return json.loads(path.read_text())
 
 
