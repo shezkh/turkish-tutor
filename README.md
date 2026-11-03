@@ -1,17 +1,32 @@
 # Turkish Tutor
 
-A web app where a 3D character ("Deniz") teaches you Turkish through real conversation, level by level (CEFR A1 → C2).
+A web app where a 3D character, Deniz, teaches you Turkish through real conversation, level by level (CEFR A1 → C2). You speak or type, Deniz answers out loud, and her mouth moves with the audio.
+
+<!-- DEMO: record ~30s of a lesson, save the GIF as docs/demo.gif, then delete this comment and uncomment the line below.
+![Deniz teaching an A1 lesson](docs/demo.gif)
+-->
+
+## What it does
+
+- **Conversation, not flashcards.** Pick a lesson, then talk to Deniz. Claude plays the tutor, in character, scoped to that lesson's material.
+- **Voice in.** Hold the 🎤 button to record, release to transcribe (Whisper) and send automatically.
+- **Voice out.** The reply is spoken with ElevenLabs and drives the avatar's mouth through amplitude-based lipsync in the browser.
+- **Six A1 lessons**, loaded from `backend/app/curriculum/*.json` and selectable from a dropdown:
+  greetings and introductions, numbers and age, family, daily routine and time, food and drink, shopping and colours.
+
+  The sequence follows the standard beginner-Turkish topic progression used by established CEFR-aligned courses (Yunus Emre Enstitüsü's *Yedi İklim Türkçe*, Ankara TÖMER's *Yeni Hitit*). The content and dialogue are original, written to fit Deniz's persona and teaching rules in `backend/app/prompts/tutor_persona.md`.
+- **Degrades instead of breaking.** If speech synthesis fails the lesson continues as text, and the app still boots with missing API keys so parts of it can be tested.
 
 ## Stack
 
-- **Frontend:** Next.js 14 (App Router) + TypeScript + Tailwind + `@react-three/fiber` (Three.js) for the 3D avatar.
-- **Avatar:** `AvatarSample_C`, an official VRoid Studio sample character (`frontend/public/avatar-vroid.glb`), downloaded from [VRoid Hub](https://hub.vroid.com/) (published by the "VRoid Project" account). License (embedded in the file and on the Hub listing): redistribution allowed, corporate/individual commercial use allowed, alterations allowed, no attribution required. Runs in the user's browser, no per-minute cost. Lipsync drives VRoid's native `Fcl_MTH_A` (mouth-open) and `Fcl_EYE_Close` (blink) blendshapes, since this stock export doesn't include the ARKit-named ones — `Avatar.tsx` falls back to these automatically when the ARKit names aren't present. Ready Player Me was the original plan but Netflix acquired RPM and shut it down on Jan 31, 2026; Avaturn (photorealistic, selfie-based) was tried next but its export had a permanent mouth-geometry artifact baked in from the source photo that no blendshape combination could fix; a third-party-modified VRoid model was tried after that but turned out to be licensed "redistribution prohibited" and was removed before ever being committed — this VRoid Hub sample is the one that's actually safe to ship. The old Avaturn files (`avatar.glb`, `avatar.bodyonly.glb`) are still in `frontend/public/` if you want to switch back.
-- **Backend:** Python FastAPI.
-- **LLM:** Anthropic Claude (tutor brain).
-- **TTS:** ElevenLabs (Turkish voice).
-- **STT:** OpenAI Whisper (hold-to-talk mic input).
-
-## Repo layout
+| Layer | Choice |
+|---|---|
+| Frontend | Next.js 14 (App Router), TypeScript, Tailwind, `@react-three/fiber` (Three.js) |
+| Backend | Python, FastAPI |
+| Tutor | Anthropic Claude |
+| Speech out | ElevenLabs (Turkish voice) |
+| Speech in | OpenAI Whisper |
+| Avatar | VRoid `AvatarSample_C`, rendered in the browser (see [Avatar](#avatar)) |
 
 ```
 .
@@ -19,76 +34,72 @@ A web app where a 3D character ("Deniz") teaches you Turkish through real conver
 └── backend/         FastAPI app — Claude, ElevenLabs, curriculum
 ```
 
-## Prerequisites
+## Running it
 
-- Node.js 20+
-- Python 3.11+
-- An Anthropic API key — https://console.anthropic.com
-- An ElevenLabs API key — https://elevenlabs.io
-- An OpenAI API key (for mic input) — https://platform.openai.com/api-keys
-- An avatar `.glb` — `frontend/public/avatar-vroid.glb` is already included (VRoid Hub's `AvatarSample_C`, redistribution-licensed). To use a different one, drop a `.glb`/`.vrm` with compatible blendshape names into `frontend/public/` and point `NEXT_PUBLIC_AVATAR_URL` at it — verify its license permits redistribution first.
+You need Node.js 20+, Python 3.11+, and API keys for [Anthropic](https://console.anthropic.com), [ElevenLabs](https://elevenlabs.io) and [OpenAI](https://platform.openai.com/api-keys). The avatar is already in the repo.
 
-## First-time setup
-
-### 1. Backend
+**Backend**
 
 ```bash
 cd backend
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env
-# edit .env and fill in ANTHROPIC_API_KEY, ELEVENLABS_API_KEY, OPENAI_API_KEY
+cp .env.example .env          # fill in the three API keys
 uvicorn app.main:app --reload --port 8000
 ```
 
-Verify: open http://localhost:8000/docs — you should see the FastAPI Swagger UI.
+Check http://localhost:8000/docs for the FastAPI Swagger UI.
 
-### 2. Frontend
+**Frontend**
 
 ```bash
 cd frontend
 npm install
 cp .env.local.example .env.local
-# The avatar GLB is already in frontend/public/avatar-vroid.glb
-# (.env.local already points NEXT_PUBLIC_AVATAR_URL=/avatar-vroid.glb)
 npm run dev
 ```
 
-Open http://localhost:3000 — you should see Deniz the avatar and a chat panel.
+Open http://localhost:3000 and you should see Deniz and a chat panel.
 
-## What works in this MVP scaffold
+## API
 
-- 3D cartoon avatar renders in the browser (VRoid-based blendshapes for lipsync/blink).
-- Type a message → Claude responds in character as a Turkish tutor for the selected lesson.
-- Tutor's reply is spoken via ElevenLabs and the avatar's mouth moves with the audio (amplitude-driven lipsync).
-- **6 A1 lessons**, selectable from a dropdown, loaded from `backend/app/curriculum/*.json`:
-  1. Greetings and introducing yourself
-  2. Numbers and age
-  3. Family
-  4. Daily routine and time
-  5. Food and drink
-  6. Shopping and colors
+- `GET /api/lessons` — list all lessons
+- `GET /api/lessons/{id}` — one lesson's full content
+- `POST /api/chat` — a conversational turn, returns text plus base64 MP3
+- `POST /api/transcribe` — audio in, text out
 
-  The sequence follows the standard beginner-Turkish topic progression used by established CEFR-aligned courses (e.g. Yunus Emre Enstitüsü's *Yedi İklim Türkçe*, Ankara TÖMER's *Yeni Hitit*) — content and dialogue are original, written to fit Deniz's persona and teaching rules in `backend/app/prompts/tutor_persona.md`.
-- `GET /api/lessons` lists all available lessons; `GET /api/lessons/{id}` fetches one lesson's full content.
-- **Mic input**: hold the 🎤 button to record, release to transcribe (OpenAI Whisper via `POST /api/transcribe`) and auto-send as your reply. Needs `OPENAI_API_KEY` and browser mic permission.
+## Avatar
 
-## What's stubbed / TODO (Phase 2+)
+The committed avatar is `AvatarSample_C`, an official VRoid Studio sample from [VRoid Hub](https://hub.vroid.com/), published by the VRoid Project account. Its licence, embedded in the file and shown on the Hub listing, allows redistribution, commercial use by individuals and companies, and alterations, with no attribution required. It renders in the user's browser, so there is no per-minute avatar cost.
 
-- [ ] Proper viseme-based lipsync (swap ElevenLabs for a TTS that emits visemes for phoneme-accurate mouth shapes).
-- [ ] A2–C2 lessons (only A1 exists so far).
-- [ ] Progress tracking + SRS flashcards (needs a Postgres DB — Supabase suggested).
-- [ ] Pronunciation scoring (Azure Speech Pronunciation Assessment).
-- [ ] Auth (Clerk or Supabase Auth).
-- [ ] Streaming responses from Claude → ElevenLabs → browser (for lower latency).
+Lipsync drives VRoid's native `Fcl_MTH_A` (mouth open) and `Fcl_EYE_Close` (blink) blendshapes rather than the ARKit-named ones, which this stock export does not include. `Avatar.tsx` detects the ARKit names and falls back automatically when they are absent, so a different model with ARKit blendshapes also works.
 
-## API keys & cost expectations (rough)
+Getting here took three attempts, which is worth recording:
 
-| Service | Cost per 15-min lesson (estimate) |
+- **Ready Player Me** was the original plan. Netflix acquired RPM and shut it down on 31 January 2026.
+- **Avaturn** (photorealistic, selfie-based) was next. Its export carried a permanent mouth-geometry artefact baked in from the source photo that no combination of blendshapes could fix. Those files are kept locally but are deliberately **not committed**, because their redistribution licence could not be verified.
+- **A third-party modified VRoid model** was tried after that and turned out to be licensed "redistribution prohibited". It was removed before ever being committed.
+
+To use your own, drop a `.glb` or `.vrm` with compatible blendshape names into `frontend/public/` and point `NEXT_PUBLIC_AVATAR_URL` at it. Check that its licence permits redistribution before you commit it.
+
+## Cost per lesson
+
+Rough estimates for a 15-minute lesson:
+
+| Service | Cost |
 |---|---|
 | Claude (with prompt caching) | ~$0.02 |
 | ElevenLabs TTS | ~$0.05–0.10 |
-| Whisper STT (mic input) | ~$0.05 |
-| Avatar + Three.js | $0 |
-| **Total per lesson** | **~$0.10–0.20** |
+| Whisper STT | ~$0.05 |
+| Avatar and Three.js | $0 |
+| **Total** | **~$0.10–0.20** |
+
+## Roadmap
+
+- [ ] Streaming Claude → ElevenLabs → browser, to cut time-to-first-word
+- [ ] Viseme-based lipsync, for phoneme-accurate mouth shapes
+- [ ] A2–C2 lessons
+- [ ] Pronunciation scoring
+- [ ] Progress tracking and spaced repetition (needs Postgres)
+- [ ] Auth
