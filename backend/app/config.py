@@ -15,7 +15,10 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 # Model names move. Check the provider's current list if a call 404s.
 CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-5")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+# Not the newest model on purpose: the latest release is usually the one the
+# free tier is crowding, and a 503 there looks like a hang because the SDK
+# retries with backoff. One or two versions back answers immediately.
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
 # Gemini 3.x reasons before answering by default, which costs seconds and eats
 # the output budget. A tutor reply does not need it. 0 disables; a negative
 # value leaves the model's own default alone.
