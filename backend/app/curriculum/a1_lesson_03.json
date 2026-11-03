@@ -1,0 +1,25 @@
+{
+  "id": "a1-lesson-03",
+  "level": "A1",
+  "title": "Family",
+  "objectives": [
+    "Name close family members (anne, baba, kardeş...)",
+    "Use the possessive suffix for 'my' (annem, babam, kardeşim)",
+    "Ask how many siblings someone has (Kaç kardeşin var?) and answer"
+  ],
+  "key_vocabulary": [
+    { "tr": "aile", "en": "family" },
+    { "tr": "anne", "en": "mother" },
+    { "tr": "baba", "en": "father" },
+    { "tr": "kardeş", "en": "sibling" },
+    { "tr": "abla", "en": "older sister" },
+    { "tr": "abi", "en": "older brother" },
+    { "tr": "kız kardeş", "en": "sister" },
+    { "tr": "erkek kardeş", "en": "brother" },
+    { "tr": "annem", "en": "my mother" },
+    { "tr": "babam", "en": "my father" },
+    { "tr": "Kaç kardeşin var?", "en": "How many siblings do you have?" },
+    { "tr": "___ kardeşim var", "en": "I have ___ siblings" }
+  ],
+  "opening_line": "Merhaba! Bugün aileni konuşalım. (Let's talk about your family today.) Benim bir kız kardeşim var. (I have a sister.) Senin ailen nasıl? Kaç kardeşin var?"
+}

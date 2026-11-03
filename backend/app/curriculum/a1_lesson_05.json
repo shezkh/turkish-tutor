@@ -1,0 +1,22 @@
+{
+  "id": "a1-lesson-05",
+  "level": "A1",
+  "title": "Food and drink",
+  "objectives": [
+    "Name common foods and drinks (çay, kahve, su, ekmek, çorba...)",
+    "Order something politely (___ istiyorum / ___ alabilir miyim?)",
+    "Use two common table phrases (Afiyet olsun, Elinize sağlık)"
+  ],
+  "key_vocabulary": [
+    { "tr": "çay", "en": "tea" },
+    { "tr": "kahve", "en": "coffee" },
+    { "tr": "su", "en": "water" },
+    { "tr": "ekmek", "en": "bread" },
+    { "tr": "çorba", "en": "soup" },
+    { "tr": "___ istiyorum", "en": "I would like ___" },
+    { "tr": "___ alabilir miyim?", "en": "Could I have ___?" },
+    { "tr": "Afiyet olsun", "en": "Enjoy your meal / Bon appétit" },
+    { "tr": "Elinize sağlık", "en": "Compliments to the cook (lit. health to your hands)" }
+  ],
+  "opening_line": "Merhaba! Hadi bir kafeye gidelim. (Let's go to a cafe.) Ben bir çay istiyorum. (I'd like a tea.) Sen ne içmek istersin? (What would you like to drink?)"
+}

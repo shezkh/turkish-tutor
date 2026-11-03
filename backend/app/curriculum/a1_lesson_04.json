@@ -1,0 +1,23 @@
+{
+  "id": "a1-lesson-04",
+  "level": "A1",
+  "title": "Daily routine and time",
+  "objectives": [
+    "Ask and tell the time (Saat kaç? / Saat ___)",
+    "Talk about a daily routine using -yor verbs (uyanıyorum, kahvaltı yapıyorum...)",
+    "Name the parts of the day (sabah, öğle, akşam)"
+  ],
+  "key_vocabulary": [
+    { "tr": "Saat kaç?", "en": "What time is it?" },
+    { "tr": "Saat ___", "en": "It's ___ o'clock" },
+    { "tr": "sabah", "en": "morning" },
+    { "tr": "öğle", "en": "noon" },
+    { "tr": "akşam", "en": "evening" },
+    { "tr": "uyanmak", "en": "to wake up" },
+    { "tr": "kahvaltı yapmak", "en": "to have breakfast" },
+    { "tr": "işe gitmek", "en": "to go to work" },
+    { "tr": "uyumak", "en": "to sleep" },
+    { "tr": "Ben sabah erken uyanıyorum", "en": "I wake up early in the morning" }
+  ],
+  "opening_line": "Merhaba! Bugün günlük hayatını konuşacağız. (Today we'll talk about your daily life.) Ben sabah erken uyanıyorum. (I wake up early in the morning.) Sen kaçta uyanıyorsun? (What time do you wake up?)"
+}

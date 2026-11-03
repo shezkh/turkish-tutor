@@ -1,0 +1,26 @@
+{
+  "id": "a1-lesson-02",
+  "level": "A1",
+  "title": "Numbers and age",
+  "objectives": [
+    "Count from 0 to 20 in Turkish",
+    "Ask someone's age (Kaç yaşındasın?) and answer (___ yaşındayım)",
+    "Use numbers to state a simple quantity"
+  ],
+  "key_vocabulary": [
+    { "tr": "sıfır", "en": "zero" },
+    { "tr": "bir", "en": "one" },
+    { "tr": "iki", "en": "two" },
+    { "tr": "üç", "en": "three" },
+    { "tr": "dört", "en": "four" },
+    { "tr": "beş", "en": "five" },
+    { "tr": "altı", "en": "six" },
+    { "tr": "yedi", "en": "seven" },
+    { "tr": "sekiz", "en": "eight" },
+    { "tr": "dokuz", "en": "nine" },
+    { "tr": "on", "en": "ten" },
+    { "tr": "Kaç yaşındasın?", "en": "How old are you? (informal)" },
+    { "tr": "___ yaşındayım", "en": "I am ___ years old" }
+  ],
+  "opening_line": "Merhaba! Bugün sayıları öğreneceğiz. (Today we'll learn numbers.) Bir, iki, üç, dört, beş... (one, two, three, four, five...) Hadi bakalım — sen kaç yaşındasın? (So tell me — how old are you?)"
+}

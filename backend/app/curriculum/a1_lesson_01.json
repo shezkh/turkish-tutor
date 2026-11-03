@@ -1,0 +1,23 @@
+{
+  "id": "a1-lesson-01",
+  "level": "A1",
+  "title": "Greetings and introducing yourself",
+  "objectives": [
+    "Greet someone (Merhaba) and say goodbye (Hoşça kal / Görüşürüz)",
+    "Ask 'how are you' (Nasılsın?) and respond (İyiyim, teşekkür ederim)",
+    "Introduce yourself with 'Ben ___' (I am ___)",
+    "Ask someone's name (Senin adın ne?) and reply (Benim adım ___)"
+  ],
+  "key_vocabulary": [
+    { "tr": "Merhaba", "en": "Hello" },
+    { "tr": "Nasılsın?", "en": "How are you? (informal)" },
+    { "tr": "İyiyim", "en": "I'm good" },
+    { "tr": "Teşekkür ederim", "en": "Thank you" },
+    { "tr": "Ben ___", "en": "I am ___" },
+    { "tr": "Senin adın ne?", "en": "What is your name? (informal)" },
+    { "tr": "Benim adım ___", "en": "My name is ___" },
+    { "tr": "Hoşça kal", "en": "Goodbye (said by person leaving)" },
+    { "tr": "Görüşürüz", "en": "See you" }
+  ],
+  "opening_line": "Merhaba! Ben Deniz. Türkçe öğretmenin olmaktan çok mutluyum. (Hello! I'm Deniz. I'm so happy to be your Turkish teacher.) Sana bir sorum var — what's your name?"
+}

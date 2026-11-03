@@ -1,0 +1,24 @@
+{
+  "id": "a1-lesson-06",
+  "level": "A1",
+  "title": "Shopping and colors",
+  "objectives": [
+    "Ask the price of something (Bu ne kadar? / Kaç lira?)",
+    "Name basic colors (kırmızı, mavi, yeşil, sarı, siyah, beyaz)",
+    "Say you'll take something (Bunu alıyorum) and call something cheap/expensive"
+  ],
+  "key_vocabulary": [
+    { "tr": "Bu ne kadar?", "en": "How much is this?" },
+    { "tr": "Kaç lira?", "en": "How many lira?" },
+    { "tr": "pahalı", "en": "expensive" },
+    { "tr": "ucuz", "en": "cheap" },
+    { "tr": "kırmızı", "en": "red" },
+    { "tr": "mavi", "en": "blue" },
+    { "tr": "yeşil", "en": "green" },
+    { "tr": "sarı", "en": "yellow" },
+    { "tr": "siyah", "en": "black" },
+    { "tr": "beyaz", "en": "white" },
+    { "tr": "Bunu alıyorum", "en": "I'll take this" }
+  ],
+  "opening_line": "Merhaba! Bugün alışverişe çıkıyoruz. (Today we're going shopping.) Bu kırmızı mı, mavi mi? (Is this red or blue?) Hangi rengi seversin? (Which color do you like?)"
+}
