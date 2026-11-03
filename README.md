@@ -73,7 +73,7 @@ LLM_PROVIDER=gemini      # or anthropic (default), or openai
 GEMINI_API_KEY=...
 ```
 
-Each provider SDK is imported inside its own function, so a provider you are not using does not need to be installed. Prompt caching is applied on the Anthropic path only, because the `cache_control` blocks are specific to that API. Model names move; if a call 404s, set `CLAUDE_MODEL`, `OPENAI_MODEL` or `GEMINI_MODEL` to whatever the provider currently lists.
+Each provider SDK is imported inside its own function, so a provider you are not using does not need to be installed. Prompt caching is applied on the Anthropic path only, because the `cache_control` blocks are specific to that API. Model names move and providers retire them, so if a call 404s the error usually names the replacement. Set `CLAUDE_MODEL`, `OPENAI_MODEL` or `GEMINI_MODEL` to whatever the provider currently lists; for Gemini, `client.models.list()` prints exactly what your key can call.
 
 ## API
 
