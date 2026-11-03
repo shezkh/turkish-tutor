@@ -15,6 +15,7 @@ from app.config import (
     CLAUDE_MODEL,
     GEMINI_API_KEY,
     GEMINI_MODEL,
+    GEMINI_THINKING_BUDGET,
     LLM_PROVIDER,
     OPENAI_API_KEY,
     OPENAI_MODEL,
@@ -100,13 +101,19 @@ async def _gemini(history: list[dict], lesson: dict) -> str:
         }
         for m in history
     ]
+    cfg: dict = {
+        "system_instruction": _system_text(lesson),
+        "max_output_tokens": MAX_TOKENS,
+    }
+    if GEMINI_THINKING_BUDGET >= 0:
+        cfg["thinking_config"] = types.ThinkingConfig(
+            thinking_budget=GEMINI_THINKING_BUDGET
+        )
+
     resp = await client.aio.models.generate_content(
         model=GEMINI_MODEL,
         contents=contents,
-        config=types.GenerateContentConfig(
-            system_instruction=_system_text(lesson),
-            max_output_tokens=MAX_TOKENS,
-        ),
+        config=types.GenerateContentConfig(**cfg),
     )
     return (resp.text or "").strip()
 

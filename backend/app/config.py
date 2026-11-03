@@ -16,6 +16,10 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-5")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+# Gemini 3.x reasons before answering by default, which costs seconds and eats
+# the output budget. A tutor reply does not need it. 0 disables; a negative
+# value leaves the model's own default alone.
+GEMINI_THINKING_BUDGET = int(os.getenv("GEMINI_THINKING_BUDGET", "0"))
 ELEVENLABS_VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "EXAVITQu4vr4xnSDxMaL")
 ELEVENLABS_MODEL = os.getenv("ELEVENLABS_MODEL", "eleven_multilingual_v2")
 
