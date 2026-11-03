@@ -111,10 +111,11 @@ async def _gemini(history: list[dict], lesson: dict) -> str:
     return (resp.text or "").strip()
 
 
+# provider -> (call, api key, key name, pip package)
 _PROVIDERS = {
-    "anthropic": (_anthropic, ANTHROPIC_API_KEY, "ANTHROPIC_API_KEY"),
-    "openai": (_openai, OPENAI_API_KEY, "OPENAI_API_KEY"),
-    "gemini": (_gemini, GEMINI_API_KEY, "GEMINI_API_KEY"),
+    "anthropic": (_anthropic, ANTHROPIC_API_KEY, "ANTHROPIC_API_KEY", "anthropic"),
+    "openai": (_openai, OPENAI_API_KEY, "OPENAI_API_KEY", "openai"),
+    "gemini": (_gemini, GEMINI_API_KEY, "GEMINI_API_KEY", "google-genai"),
 }
 
 
@@ -128,7 +129,7 @@ async def generate_tutor_reply(history: list[dict], lesson: dict) -> str:
             f"choose one of: {', '.join(sorted(_PROVIDERS))}]"
         )
 
-    call, api_key, key_name = provider
+    call, api_key, key_name, package = provider
     if not api_key:
         return f"[LLM not configured — set {key_name} in backend/.env]"
 
@@ -136,4 +137,12 @@ async def generate_tutor_reply(history: list[dict], lesson: dict) -> str:
     if not history:
         history = [{"role": "user", "content": "(start the lesson)"}]
 
-    return await call(history, lesson)
+    try:
+        return await call(history, lesson)
+    except ImportError:
+        # The provider SDK is optional, so say which one to install rather
+        # than letting a ModuleNotFoundError become a 500.
+        return (
+            f"[LLM_PROVIDER is {LLM_PROVIDER} but its SDK is not installed — "
+            f"run: pip install {package}]"
+        )
